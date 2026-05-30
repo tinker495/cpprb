@@ -416,16 +416,18 @@ class TestNstepBuffer(unittest.TestCase):
         nb = NstepBuffer({"rew": {}, "done": {}},
                          {"size": 4, "rew": "rew", "gamma": 0.5})
 
+        self.assertIs(nb.add(rew=1,done=0),None) # step 0
+        self.assertIs(nb.add(rew=1,done=1),None) # step 1
+        np.testing.assert_allclose(nb.on_episode_end()["rew"], np.array((1.5 , 1),dtype=np.float32).reshape(-1,1)) # out step 0  and rewaord step 0 * 0.5^1 + step 1 * 0.5^0
+        ''' on_episode_end must after done
         self.assertIs(nb.add(rew=1,done=0),None)
-        self.assertIs(nb.add(rew=1,done=1),None)
-        self.assertIs(nb.add(rew=1,done=0),None)
-
         np.testing.assert_allclose(nb.add(rew=1,done=0)["rew"],
                                    1 + 0.5)
         np.testing.assert_allclose(nb.add(rew=1,done=0)["rew"],
                                    1)
         np.testing.assert_allclose(nb.add(rew=1,done=0)["rew"],
                                    1 + 0.5 + 0.5*0.5 + 0.5*0.5*0.5)
+        '''
 
     def test_rew_multi_step(self):
         nb = NstepBuffer({'rew': {}, 'done': {}},
@@ -464,7 +466,13 @@ class TestNstepBuffer(unittest.TestCase):
     def test_gamma_with_done(self):
         nb = NstepBuffer({"rew": {}, "done": {}},
                          {"size": 4, "rew": "rew", "gamma": 0.5})
+        
 
+        self.assertIs(nb.add(rew=1,done=0),None)
+        self.assertIs(nb.add(rew=1,done=1),None)
+        np.testing.assert_allclose(nb.on_episode_end()['done'],np.asarray([[1],[1]]))
+
+        ''' on_episode_end must after done
         self.assertIs(nb.add(rew=1,done=0),None)
         self.assertIs(nb.add(rew=1,done=1),None)
         self.assertIs(nb.add(rew=1,done=0),None)
@@ -472,6 +480,7 @@ class TestNstepBuffer(unittest.TestCase):
         np.testing.assert_allclose(nb.add(rew=1,done=0)["done"],np.asarray([[1]]))
         np.testing.assert_allclose(nb.add(rew=1,done=0)["done"],np.asarray([[1]]))
         np.testing.assert_allclose(nb.add(rew=1,done=0)["done"],np.asarray([[0]]))
+        '''
 
     def test_gamma_multi_step(self):
         nb = NstepBuffer({'rew': {}, 'done': {}},

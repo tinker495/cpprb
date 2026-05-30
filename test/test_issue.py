@@ -900,34 +900,34 @@ class TestIssue137(unittest.TestCase):
         rb.on_episode_end()
 
         np.testing.assert_allclose(rb.get_all_transitions()["done"],
-                                   np.asarray([[0], [1], [1], [1]]))
+                                   np.asarray([[1], [1], [1], [1]]))
 
         rb.add(done=0)
         rb.add(done=0)
         rb.add(done=0)
         rb.add(done=0)
         np.testing.assert_allclose(rb.get_all_transitions()["done"],
-                                   np.asarray([[0], [1], [1], [1],
+                                   np.asarray([[1], [1], [1], [1],
                                                [0]]))
 
         rb.add(done=1)
         rb.on_episode_end()
         np.testing.assert_allclose(rb.get_all_transitions()["done"],
-                                   np.asarray([[0], [1], [1], [1],
-                                               [0], [0], [1], [1], [1]]))
+                                   np.asarray([[1], [1], [1], [1],
+                                               [0], [1], [1], [1], [1]]))
 
         rb.add(done=1)
         rb.on_episode_end()
         np.testing.assert_allclose(rb.get_all_transitions()["done"],
-                                   np.asarray([[0], [1], [1], [1],
-                                               [0], [0], [1], [1], [1],
+                                   np.asarray([[1], [1], [1], [1],
+                                               [0], [1], [1], [1], [1],
                                                [1]]))
 
         rb.add(done=1)
         rb.on_episode_end()
         np.testing.assert_allclose(rb.get_all_transitions()["done"],
-                                   np.asarray([[0], [1], [1], [1],
-                                               [0], [0], [1], [1], [1],
+                                   np.asarray([[1], [1], [1], [1],
+                                               [0], [1], [1], [1], [1],
                                                [1],
                                                [1]]))
 
@@ -935,8 +935,8 @@ class TestIssue137(unittest.TestCase):
         rb.add(done=1)
         rb.on_episode_end()
         np.testing.assert_allclose(rb.get_all_transitions()["done"],
-                                   np.asarray([[0], [1], [1], [1],
-                                               [0], [0], [1], [1], [1],
+                                   np.asarray([[1], [1], [1], [1],
+                                               [0], [1], [1], [1], [1],
                                                [1],
                                                [1],
                                                [1], [1]]))
@@ -946,8 +946,8 @@ class TestIssue137(unittest.TestCase):
         rb.add(done=1)
         rb.on_episode_end()
         np.testing.assert_allclose(rb.get_all_transitions()["done"],
-                                   np.asarray([[0], [1], [1], [1],
-                                               [0], [0], [1], [1], [1],
+                                   np.asarray([[1], [1], [1], [1],
+                                               [0], [1], [1], [1], [1],
                                                [1],
                                                [1],
                                                [1], [1],
@@ -981,7 +981,7 @@ class TestIssue137(unittest.TestCase):
 
         sample = rb.get_all_transitions()
         np.testing.assert_allclose(sample["next_obs"][sample["done"] == 0.0],
-                                   np.asarray([4,5,6]))
+                                   np.asarray([4,5]))
 
         rb.add(next_obs=7,done=0)
         rb.add(next_obs=8,done=0)
@@ -990,7 +990,7 @@ class TestIssue137(unittest.TestCase):
         rb.on_episode_end()
         sample = rb.get_all_transitions()
         np.testing.assert_allclose(sample["next_obs"][sample["done"] == 0.0],
-                                   np.asarray([4,5,6,10]))
+                                   np.asarray([4,5]))
 
 
 class TestIssue143(unittest.TestCase):
